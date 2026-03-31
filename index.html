@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>Dipen Bhattarai | Electrical Engineer Portfolio</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,600;14..32,700&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Inter', sans-serif; background: #f8fafc; color: #0f172a; line-height: 1.5; scroll-behavior: smooth; }
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 24px; }
+        .navbar { background: white; box-shadow: 0 4px 20px rgba(0,0,0,0.02); padding: 1rem 0; position: sticky; top: 0; z-index: 100; backdrop-filter: blur(8px); background: rgba(255,255,255,0.92); }
+        .nav-flex { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; }
+        .logo { font-size: 1.6rem; font-weight: 700; background: linear-gradient(135deg, #1e3c72, #2b4c7c); -webkit-background-clip: text; background-clip: text; color: transparent; }
+        .nav-links { display: flex; gap: 2rem; align-items: center; flex-wrap: wrap; }
+        .nav-links a { text-decoration: none; font-weight: 500; color: #1e293b; transition: 0.2s; }
+        .nav-links a:hover { color: #2563eb; }
+        .btn-cv { background: #0f172a; color: white !important; padding: 0.5rem 1.2rem; border-radius: 40px; font-weight: 600; transition: 0.2s; }
+        .btn-cv:hover { background: #2563eb; transform: translateY(-2px); }
+        .hero { padding: 4rem 0 3rem; }
+        .hero-content h1 { font-size: 3rem; font-weight: 800; background: linear-gradient(135deg, #0f172a, #2c3e66); -webkit-background-clip: text; background-clip: text; color: transparent; margin-bottom: 1rem; }
+        .hero-content p { font-size: 1.2rem; color: #334155; max-width: 600px; margin-bottom: 1.8rem; }
+        .section-title { font-size: 2rem; font-weight: 700; margin: 2rem 0 1.5rem; border-left: 5px solid #2563eb; padding-left: 1rem; }
+        .skills-grid { display: flex; flex-wrap: wrap; gap: 1.2rem; margin-bottom: 2rem; }
+        .skill-card { background: white; padding: 0.8rem 1.6rem; border-radius: 60px; font-weight: 600; box-shadow: 0 4px 10px rgba(0,0,0,0.02); border: 1px solid #e2e8f0; transition: all 0.2s; font-size: 1rem; color: #1e293b; }
+        .skill-card:hover { border-color: #2563eb; transform: translateY(-3px); }
+        .projects-grid, .research-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 1.8rem; margin-bottom: 2rem; }
+        .project-card, .research-card { background: white; border-radius: 24px; padding: 1.5rem; border: 1px solid #eef2ff; transition: 0.2s; box-shadow: 0 8px 20px rgba(0,0,0,0.02); }
+        .project-card:hover, .research-card:hover { transform: translateY(-5px); border-color: #cbd5e1; }
+        .project-card h3, .research-card h3 { font-size: 1.3rem; margin-bottom: 0.5rem; color: #0f172a; }
+        .project-card p, .research-card p { color: #475569; margin-bottom: 1rem; }
+        .project-link, .research-link { display: inline-flex; align-items: center; gap: 0.5rem; color: #2563eb; text-decoration: none; font-weight: 500; }
+        .contact-info { background: white; border-radius: 28px; padding: 2rem; box-shadow: 0 20px 35px -12px rgba(0,0,0,0.05); margin: 2rem 0; border: 1px solid #eef2ff; }
+        .info-row { display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem; flex-wrap: wrap; }
+        .info-row i { width: 32px; color: #2563eb; font-size: 1.3rem; }
+        .social-links { display: flex; gap: 1.2rem; margin-top: 1.2rem; }
+        .social-links a { background: #f1f5f9; width: 44px; height: 44px; display: inline-flex; align-items: center; justify-content: center; border-radius: 50%; color: #1e293b; font-size: 1.5rem; transition: 0.2s; }
+        .social-links a:hover { background: #2563eb; color: white; transform: scale(1.05); }
+        .contact-form { background: white; border-radius: 28px; padding: 2rem; margin: 2rem 0; box-shadow: 0 20px 35px -12px rgba(0,0,0,0.05); }
+        .form-group { margin-bottom: 1.2rem; }
+        input, textarea { width: 100%; padding: 12px 18px; border: 1px solid #cbd5e1; border-radius: 28px; font-family: inherit; font-size: 1rem; transition: 0.2s; }
+        input:focus, textarea:focus { outline: none; border-color: #2563eb; box-shadow: 0 0 0 3px rgba(37,99,235,0.1); }
+        button { background: #0f172a; color: white; border: none; padding: 12px 28px; border-radius: 40px; font-weight: 600; cursor: pointer; font-size: 1rem; transition: 0.2s; }
+        button:hover { background: #2563eb; transform: translateY(-2px); }
+        .form-message { margin-top: 1rem; font-weight: 500; }
+        footer { text-align: center; padding: 2rem 0; border-top: 1px solid #e2e8f0; color: #475569; margin-top: 2rem; }
+        .admin-badge { position: fixed; bottom: 20px; right: 20px; background: #f1f5f9; padding: 8px 16px; border-radius: 40px; font-size: 0.8rem; z-index: 99; text-decoration: none; color: #334155; font-weight: 500; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
+        @media (max-width: 768px) {
+            .hero-content h1 { font-size: 2.2rem; }
+            .nav-flex { flex-direction: column; }
+            .section-title { font-size: 1.7rem; }
+            .projects-grid, .research-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="navbar">
+    <div class="container nav-flex">
+        <div class="logo">Dipen Bhattarai</div>
+        <div class="nav-links">
+            <a href="#home">Home</a>
+            <a href="#skills">Skills</a>
+            <a href="#projects">Projects</a>
+            <a href="#research">Research</a>
+            <a href="#contact">Contact</a>
+            <a href="#" id="downloadCvBtn" class="btn-cv"><i class="fas fa-download"></i> Download CV</a>
+        </div>
+    </div>
+</div>
+
+<main>
+    <div class="container" id="home">
+        <div class="hero" id="heroSection">
+            <div class="hero-content">
+                <h1 id="heroTitle">Loading...</h1>
+                <p id="heroDesc">Loading...</p>
+            </div>
+        </div>
+
+        <div id="skills">
+            <h2 class="section-title"><i class="fas fa-microchip"></i> Technical Skills</h2>
+            <div id="skillsContainer" class="skills-grid">Loading...</div>
+        </div>
+
+        <div id="projects">
+            <h2 class="section-title"><i class="fas fa-folder-open"></i> Projects</h2>
+            <div id="projectsContainer" class="projects-grid">Loading...</div>
+        </div>
+
+        <div id="research">
+            <h2 class="section-title"><i class="fas fa-flask"></i> Research</h2>
+            <div id="researchContainer" class="research-grid">Loading...</div>
+        </div>
+
+        <div id="contact">
+            <h2 class="section-title"><i class="fas fa-address-card"></i> Get in Touch</h2>
+            <div class="contact-info" id="contactInfo">
+                <div class="info-row" id="emailRow"><i class="fas fa-envelope"></i> <span>Loading...</span></div>
+                <div class="info-row" id="addressRow"><i class="fas fa-map-marker-alt"></i> <span>Loading...</span></div>
+                <div class="info-row" id="phoneRow"><i class="fas fa-phone-alt"></i> <span>Loading...</span></div>
+                <div class="social-links" id="socialLinks">
+                    <a href="#" target="_blank"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#" target="_blank"><i class="fab fa-instagram"></i></a>
+                </div>
+            </div>
+
+            <div class="contact-form">
+                <h3 style="margin-bottom: 1.2rem;">Send a Message</h3>
+                <form id="contactForm">
+                    <div class="form-group"><input type="text" id="contactName" placeholder="Your Name" required></div>
+                    <div class="form-group"><input type="email" id="contactEmail" placeholder="Your Email" required></div>
+                    <div class="form-group"><textarea rows="4" id="contactMsg" placeholder="Your Message..." required></textarea></div>
+                    <button type="submit">Send Message <i class="fas fa-paper-plane"></i></button>
+                    <div id="formFeedback" class="form-message"></div>
+                </form>
+            </div>
+        </div>
+    </div>
+</main>
+
+<footer>
+    <div class="container">
+        <p id="copyrightText">Loading...</p>
+    </div>
+</footer>
+
+<a href="admin.html" class="admin-badge"><i class="fas fa-user-cog"></i> Admin Panel</a>
+
+<!-- Firebase SDK - Compatibility versions -->
+<script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js"></script>
+
+<script>
+    // 🔥 REPLACE WITH YOUR ACTUAL FIREBASE CONFIG
+    const firebaseConfig = {
+        apiKey: "AIzaSyCpfAZO2vOGvoryneE6nzjJNnxiPFWksOg",
+        authDomain: "dipen-portfolio.firebaseapp.com",
+        projectId: "dipen-portfolio",
+        storageBucket: "dipen-portfolio.firebasestorage.app",
+        messagingSenderId: "119380979321",
+        appId: "1:119380979321:web:5a29d469f2f7a3fbc82ea8",
+        measurementId: "G-KE78WMW9Q8"
+    };
+    // Initialize Firebase
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.firestore();
+
+    // Default fallback data (used if Firestore fails)
+    const DEFAULTS = {
+        hero: { title: "Electrical Engineer & <br>Design Specialist", desc: "Expert in AutoCAD Electrical, Proteus, ETAP, MATLAB. Delivering precise automation and power system solutions." },
+        skills: ["AutoCAD Electrical", "Proteus", "ETAP", "MATLAB"],
+        projects: [
+            { title: "Smart Grid Monitoring System", description: "Designed a real-time monitoring interface using ETAP and IoT sensors.", link: "#" },
+            { title: "PLC Based Automation", description: "Automated industrial conveyor using AutoCAD Electrical and ladder logic.", link: "#" }
+        ],
+        research: [
+            { title: "Microgrid Stability Analysis", description: "Research on frequency regulation in islanded microgrids using MATLAB/Simulink.", link: "#" },
+            { title: "EV Charging Station Optimization", description: "Load flow and placement optimization using ETAP and genetic algorithms.", link: "#" }
+        ],
+        contact: { email: "contact@dipenbhattarai.com.np", address: "Jhapa, Nepal", phone: "+977 9898989898" },
+        social: { facebook: "https://facebook.com/dipenbhattarai", instagram: "https://instagram.com/dipenbhattarai" },
+        cv: { url: "#" },
+        copyright: { text: "© 2025 Dipen Bhattarai — Precision in Power & Control" }
+    };
+
+    async function getFirestoreDoc(collection, docId, fallback) {
+        try {
+            const doc = await db.collection(collection).doc(docId).get();
+            if (doc.exists) return doc.data();
+            return fallback;
+        } catch (error) {
+            console.warn(`Firestore read error for ${collection}/${docId}:`, error);
+            return fallback;
+        }
+    }
+
+    async function loadAllData() {
+        // Hero
+        const hero = await getFirestoreDoc("settings", "hero", DEFAULTS.hero);
+        document.getElementById("heroTitle").innerHTML = hero.title;
+        document.getElementById("heroDesc").innerText = hero.desc;
+
+        // Skills
+        const skillsData = await getFirestoreDoc("settings", "skills", { skills: DEFAULTS.skills });
+        const skillsContainer = document.getElementById("skillsContainer");
+        skillsContainer.innerHTML = skillsData.skills.map(s => `<div class="skill-card">${escapeHtml(s)}</div>`).join("");
+
+        // Projects
+        const projectsData = await getFirestoreDoc("settings", "projects", { projects: DEFAULTS.projects });
+        const projectsContainer = document.getElementById("projectsContainer");
+        projectsContainer.innerHTML = projectsData.projects.map(p => `
+            <div class="project-card">
+                <h3>${escapeHtml(p.title)}</h3>
+                <p>${escapeHtml(p.description)}</p>
+                ${p.link && p.link !== "#" ? `<a href="${p.link}" target="_blank" class="project-link">Learn More <i class="fas fa-arrow-right"></i></a>` : ''}
+            </div>
+        `).join("");
+
+        // Research
+        const researchData = await getFirestoreDoc("settings", "research", { research: DEFAULTS.research });
+        const researchContainer = document.getElementById("researchContainer");
+        researchContainer.innerHTML = researchData.research.map(r => `
+            <div class="research-card">
+                <h3>${escapeHtml(r.title)}</h3>
+                <p>${escapeHtml(r.description)}</p>
+                ${r.link && r.link !== "#" ? `<a href="${r.link}" target="_blank" class="research-link">Read More <i class="fas fa-external-link-alt"></i></a>` : ''}
+            </div>
+        `).join("");
+
+        // Contact
+        const contact = await getFirestoreDoc("settings", "contact", DEFAULTS.contact);
+        document.querySelector("#emailRow span").innerText = contact.email;
+        document.querySelector("#addressRow span").innerText = contact.address;
+        document.querySelector("#phoneRow span").innerText = contact.phone;
+
+        // Social
+        const social = await getFirestoreDoc("settings", "social", DEFAULTS.social);
+        const socialDiv = document.getElementById("socialLinks");
+        socialDiv.innerHTML = `
+            <a href="${social.facebook}" target="_blank"><i class="fab fa-facebook-f"></i></a>
+            <a href="${social.instagram}" target="_blank"><i class="fab fa-instagram"></i></a>
+        `;
+
+        // CV
+        const cv = await getFirestoreDoc("settings", "cv", DEFAULTS.cv);
+        const cvBtn = document.getElementById("downloadCvBtn");
+        cvBtn.onclick = (e) => {
+            e.preventDefault();
+            if (cv.url && cv.url !== "#") {
+                window.open(cv.url, "_blank");
+            } else {
+                alert("CV not available yet.");
+            }
+        };
+
+        // Copyright
+        const copyright = await getFirestoreDoc("settings", "copyright", DEFAULTS.copyright);
+        document.getElementById("copyrightText").innerText = copyright.text;
+    }
+
+    // Contact form submission
+    const contactForm = document.getElementById("contactForm");
+    const feedbackDiv = document.getElementById("formFeedback");
+    contactForm.addEventListener("submit", async (e) => {
+        e.preventDefault();
+        const name = document.getElementById("contactName").value.trim();
+        const email = document.getElementById("contactEmail").value.trim();
+        const message = document.getElementById("contactMsg").value.trim();
+        if (!name || !email || !message) {
+            feedbackDiv.innerHTML = '<span style="color:#e11d48;">All fields are required.</span>';
+            return;
+        }
+        try {
+            await db.collection("messages").add({
+                name, email, message,
+                date: new Date().toLocaleString(),
+                timestamp: firebase.firestore.FieldValue.serverTimestamp()
+            });
+            feedbackDiv.innerHTML = '<span style="color:#16a34a;">✓ Message sent successfully! I’ll get back soon.</span>';
+            contactForm.reset();
+        } catch (err) {
+            console.error("Message send error:", err);
+            feedbackDiv.innerHTML = '<span style="color:#e11d48;">Error sending message. Please try again.</span>';
+        }
+    });
+
+    function escapeHtml(str) {
+        if (!str) return '';
+        return str.replace(/[&<>]/g, function(m) {
+            if (m === '&') return '&amp;';
+            if (m === '<') return '&lt;';
+            if (m === '>') return '&gt;';
+            return m;
+        });
+    }
+
+    loadAllData();
+</script>
+</body>
+</html>

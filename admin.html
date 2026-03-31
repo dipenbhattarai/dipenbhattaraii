@@ -1,0 +1,565 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel | Dipen Bhattarai</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Inter', system-ui, sans-serif; background: #f1f5f9; padding: 2rem; }
+        .admin-container { max-width: 1000px; margin: 0 auto; background: white; border-radius: 32px; padding: 2rem; box-shadow: 0 20px 35px -12px rgba(0,0,0,0.1); }
+        h1 { font-size: 1.8rem; margin-bottom: 1.5rem; border-left: 5px solid #2563eb; padding-left: 1rem; }
+        .section { margin-bottom: 2rem; border-bottom: 1px solid #e2e8f0; padding-bottom: 1.5rem; }
+        .section h2 { font-size: 1.3rem; margin-bottom: 1rem; color: #0f172a; }
+        label { display: block; font-weight: 600; margin: 0.8rem 0 0.3rem; }
+        input, textarea { width: 100%; padding: 10px 14px; border: 1px solid #cbd5e1; border-radius: 20px; font-family: inherit; font-size: 0.95rem; }
+        button { background: #0f172a; color: white; border: none; padding: 10px 20px; border-radius: 40px; cursor: pointer; margin-top: 1rem; font-weight: 600; }
+        button:hover { background: #2563eb; }
+        .message-list, .items-list { background: #f8fafc; border-radius: 20px; padding: 1rem; max-height: 350px; overflow-y: auto; margin-bottom: 1rem; }
+        .message-item, .item-card { background: white; padding: 0.8rem; margin-bottom: 0.8rem; border-radius: 16px; border: 1px solid #e2e8f0; }
+        .message-item strong { color: #2563eb; }
+        .item-actions { margin-top: 0.5rem; display: flex; gap: 0.5rem; }
+        .item-actions button { background: #e2e8f0; color: #0f172a; padding: 4px 12px; font-size: 0.8rem; margin-top: 0; }
+        .item-actions button.delete-btn { background: #fee2e2; color: #e11d48; }
+        .logout-btn { background: #e11d48; }
+        .status { margin-top: 0.5rem; font-size: 0.9rem; color: #16a34a; }
+        .add-btn { background: #2563eb; margin-top: 0; }
+        .back-link { display: inline-block; margin-top: 1.5rem; color: #2563eb; text-decoration: none; }
+        .login-box { text-align: center; }
+        input.error { border-color: #e11d48; }
+        .forgot-link { background: none; border: none; color: #2563eb; cursor: pointer; margin-top: 0.5rem; font-size: 0.9rem; display: inline-block; text-decoration: underline; }
+        .reset-form { display: none; margin-top: 1rem; padding: 1rem; background: #f8fafc; border-radius: 24px; }
+    </style>
+</head>
+<body>
+<div class="admin-container" id="adminApp">
+    <div id="loginView">
+        <h1>🔐 Admin Login</h1>
+        <div class="login-box">
+            <label>Email</label>
+            <input type="email" id="adminEmail" placeholder="admin@example.com">
+            <label>Password</label>
+            <input type="password" id="adminPassword" placeholder="Enter password">
+            <button id="loginBtn">Login</button>
+            <div id="loginError" style="color:#e11d48; margin-top: 0.5rem;"></div>
+            <button id="forgotPasswordBtn" class="forgot-link" style="background: none; width: auto; margin-top: 0.2rem;">Forgot password?</button>
+
+            <div id="resetForm" class="reset-form">
+                <label>Enter your admin email</label>
+                <input type="email" id="resetEmail" placeholder="admin@example.com">
+                <button id="sendResetBtn">Send Reset Email</button>
+                <div id="resetMessage" style="margin-top: 0.5rem; font-size: 0.8rem;"></div>
+                <button id="cancelResetBtn" class="forgot-link" style="background: none; margin-top: 0.5rem;">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="dashboardView" style="display: none;">
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+            <h1>⚙️ Admin Dashboard</h1>
+            <button id="logoutBtn" class="logout-btn">Logout</button>
+        </div>
+
+        <!-- Hero Section -->
+        <div class="section">
+            <h2><i class="fas fa-heading"></i> Hero Section</h2>
+            <label>Hero Title (HTML allowed)</label>
+            <input type="text" id="heroTitleInput" placeholder="Hero Title">
+            <label>Hero Description</label>
+            <textarea id="heroDescInput" rows="2" placeholder="Hero description"></textarea>
+            <button id="saveHeroBtn">Save Hero</button>
+            <div id="heroStatus" class="status"></div>
+        </div>
+
+        <!-- Skills -->
+        <div class="section">
+            <h2><i class="fas fa-code"></i> Skills</h2>
+            <label>Skills (one per line)</label>
+            <textarea id="skillsInput" rows="4" placeholder="AutoCAD Electrical&#10;Proteus&#10;ETAP&#10;MATLAB"></textarea>
+            <button id="saveSkillsBtn">Save Skills</button>
+            <div id="skillsStatus" class="status"></div>
+        </div>
+
+        <!-- Projects -->
+        <div class="section">
+            <h2><i class="fas fa-folder-open"></i> Projects</h2>
+            <div id="projectsList" class="items-list">Loading...</div>
+            <div style="background:#f8fafc; padding:1rem; border-radius:20px;">
+                <h3>Add New Project</h3>
+                <label>Title</label>
+                <input type="text" id="newProjectTitle" placeholder="Project title">
+                <label>Description</label>
+                <textarea id="newProjectDesc" rows="2" placeholder="Short description"></textarea>
+                <label>Link (optional)</label>
+                <input type="url" id="newProjectLink" placeholder="https://...">
+                <button id="addProjectBtn" class="add-btn">+ Add Project</button>
+            </div>
+        </div>
+
+        <!-- Research -->
+        <div class="section">
+            <h2><i class="fas fa-flask"></i> Research</h2>
+            <div id="researchList" class="items-list">Loading...</div>
+            <div style="background:#f8fafc; padding:1rem; border-radius:20px;">
+                <h3>Add New Research</h3>
+                <label>Title</label>
+                <input type="text" id="newResearchTitle" placeholder="Research title">
+                <label>Description</label>
+                <textarea id="newResearchDesc" rows="2" placeholder="Short description"></textarea>
+                <label>Link (optional)</label>
+                <input type="url" id="newResearchLink" placeholder="https://...">
+                <button id="addResearchBtn" class="add-btn">+ Add Research</button>
+            </div>
+        </div>
+
+        <!-- Contact Info -->
+        <div class="section">
+            <h2><i class="fas fa-address-card"></i> Contact Information</h2>
+            <label>Email</label>
+            <input type="email" id="contactEmailInput" placeholder="Email">
+            <label>Address</label>
+            <input type="text" id="contactAddressInput" placeholder="Address">
+            <label>Phone</label>
+            <input type="text" id="contactPhoneInput" placeholder="Phone">
+            <button id="saveContactBtn">Save Contact Info</button>
+            <div id="contactStatus" class="status"></div>
+        </div>
+
+        <!-- Social Links -->
+        <div class="section">
+            <h2><i class="fab fa-facebook"></i> Social Links</h2>
+            <label>Facebook URL</label>
+            <input type="url" id="fbUrl" placeholder="https://facebook.com/...">
+            <label>Instagram URL</label>
+            <input type="url" id="igUrl" placeholder="https://instagram.com/...">
+            <button id="saveSocialBtn">Save Social Links</button>
+            <div id="socialStatus" class="status"></div>
+        </div>
+
+        <!-- CV Download -->
+        <div class="section">
+            <h2><i class="fas fa-file-pdf"></i> CV Download</h2>
+            <label>CV File URL (direct link)</label>
+            <input type="url" id="cvUrl" placeholder="https://example.com/cv.pdf">
+            <button id="saveCvBtn">Save CV Link</button>
+            <div id="cvStatus" class="status"></div>
+        </div>
+
+        <!-- Copyright -->
+        <div class="section">
+            <h2><i class="fas fa-copyright"></i> Copyright Text</h2>
+            <input type="text" id="copyrightInput" placeholder="Copyright text">
+            <button id="saveCopyrightBtn">Save Copyright</button>
+            <div id="copyrightStatus" class="status"></div>
+        </div>
+
+        <!-- Contact Messages -->
+        <div class="section">
+            <h2><i class="fas fa-envelope"></i> Contact Messages</h2>
+            <div id="messagesList" class="message-list">Loading...</div>
+            <button id="clearMessagesBtn" style="background:#334155;">Clear All Messages</button>
+        </div>
+
+        <a href="index.html" class="back-link">← Back to Website</a>
+    </div>
+</div>
+
+<!-- Firebase SDK - Compatibility versions -->
+<script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js"></script>
+
+<script>
+    // 🔥 REPLACE WITH YOUR ACTUAL FIREBASE CONFIG
+    const firebaseConfig = {
+        apiKey: "AIzaSyCpfAZO2vOGvoryneE6nzjJNnxiPFWksOg",
+        authDomain: "dipen-portfolio.firebaseapp.com",
+        projectId: "dipen-portfolio",
+        storageBucket: "dipen-portfolio.firebasestorage.app",
+        messagingSenderId: "119380979321",
+        appId: "1:119380979321:web:5a29d469f2f7a3fbc82ea8",
+        measurementId: "G-KE78WMW9Q8"
+    };
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.firestore();
+    const auth = firebase.auth();
+
+    // Default fallback data
+    const DEFAULTS = {
+        hero: { title: "Electrical Engineer & <br>Design Specialist", desc: "Expert in AutoCAD Electrical, Proteus, ETAP, MATLAB. Delivering precise automation and power system solutions." },
+        skills: ["AutoCAD Electrical", "Proteus", "ETAP", "MATLAB"],
+        contact: { email: "contact@dipenbhattarai.com.np", address: "Jhapa, Nepal", phone: "+977 9898989898" },
+        social: { facebook: "https://facebook.com/dipenbhattarai", instagram: "https://instagram.com/dipenbhattarai" },
+        cv: { url: "#" },
+        copyright: { text: "© 2025 Dipen Bhattarai — Precision in Power & Control" }
+    };
+
+    async function getFirestoreDoc(collection, docId, fallback) {
+        try {
+            const doc = await db.collection(collection).doc(docId).get();
+            if (doc.exists) return doc.data();
+            return fallback;
+        } catch (error) {
+            console.warn(`Firestore read error for ${collection}/${docId}:`, error);
+            return fallback;
+        }
+    }
+
+    async function saveFirestoreDoc(collection, docId, data) {
+        try {
+            await db.collection(collection).doc(docId).set(data, { merge: true });
+        } catch (error) {
+            console.error(`Firestore write error for ${collection}/${docId}:`, error);
+            throw error;
+        }
+    }
+
+    async function loadAdminData() {
+        // Hero
+        const hero = await getFirestoreDoc("settings", "hero", DEFAULTS.hero);
+        document.getElementById("heroTitleInput").value = hero.title;
+        document.getElementById("heroDescInput").value = hero.desc;
+
+        // Skills
+        const skills = await getFirestoreDoc("settings", "skills", { skills: DEFAULTS.skills });
+        document.getElementById("skillsInput").value = skills.skills.join("\n");
+
+        // Contact
+        const contact = await getFirestoreDoc("settings", "contact", DEFAULTS.contact);
+        document.getElementById("contactEmailInput").value = contact.email;
+        document.getElementById("contactAddressInput").value = contact.address;
+        document.getElementById("contactPhoneInput").value = contact.phone;
+
+        // Social
+        const social = await getFirestoreDoc("settings", "social", DEFAULTS.social);
+        document.getElementById("fbUrl").value = social.facebook;
+        document.getElementById("igUrl").value = social.instagram;
+
+        // CV
+        const cv = await getFirestoreDoc("settings", "cv", DEFAULTS.cv);
+        document.getElementById("cvUrl").value = cv.url;
+
+        // Copyright
+        const copyright = await getFirestoreDoc("settings", "copyright", DEFAULTS.copyright);
+        document.getElementById("copyrightInput").value = copyright.text;
+
+        renderProjects();
+        renderResearch();
+        renderMessages();
+    }
+
+    async function renderProjects() {
+        const projectsData = await getFirestoreDoc("settings", "projects", { projects: [] });
+        const projects = projectsData.projects;
+        const container = document.getElementById("projectsList");
+        if (!projects.length) {
+            container.innerHTML = "<p>No projects yet. Add one below.</p>";
+            return;
+        }
+        container.innerHTML = projects.map((proj, idx) => `
+            <div class="item-card">
+                <strong>${escapeHtml(proj.title)}</strong><br>
+                <small>${escapeHtml(proj.description)}</small><br>
+                ${proj.link && proj.link !== "#" ? `<a href="${proj.link}" target="_blank">${proj.link}</a><br>` : ""}
+                <div class="item-actions">
+                    <button class="edit-project" data-index="${idx}">Edit</button>
+                    <button class="delete-project" data-index="${idx}" class="delete-btn">Delete</button>
+                </div>
+            </div>
+        `).join("");
+        document.querySelectorAll(".edit-project").forEach(btn => {
+            btn.addEventListener("click", () => editProject(btn.dataset.index));
+        });
+        document.querySelectorAll(".delete-project").forEach(btn => {
+            btn.addEventListener("click", () => deleteProject(btn.dataset.index));
+        });
+    }
+
+    async function renderResearch() {
+        const researchData = await getFirestoreDoc("settings", "research", { research: [] });
+        const research = researchData.research;
+        const container = document.getElementById("researchList");
+        if (!research.length) {
+            container.innerHTML = "<p>No research items yet. Add one below.</p>";
+            return;
+        }
+        container.innerHTML = research.map((item, idx) => `
+            <div class="item-card">
+                <strong>${escapeHtml(item.title)}</strong><br>
+                <small>${escapeHtml(item.description)}</small><br>
+                ${item.link && item.link !== "#" ? `<a href="${item.link}" target="_blank">${item.link}</a><br>` : ""}
+                <div class="item-actions">
+                    <button class="edit-research" data-index="${idx}">Edit</button>
+                    <button class="delete-research" data-index="${idx}" class="delete-btn">Delete</button>
+                </div>
+            </div>
+        `).join("");
+        document.querySelectorAll(".edit-research").forEach(btn => {
+            btn.addEventListener("click", () => editResearch(btn.dataset.index));
+        });
+        document.querySelectorAll(".delete-research").forEach(btn => {
+            btn.addEventListener("click", () => deleteResearch(btn.dataset.index));
+        });
+    }
+
+    async function editProject(index) {
+        const projectsData = await getFirestoreDoc("settings", "projects", { projects: [] });
+        const projects = projectsData.projects;
+        const proj = projects[index];
+        const newTitle = prompt("Edit project title:", proj.title);
+        if (newTitle !== null) proj.title = newTitle;
+        const newDesc = prompt("Edit project description:", proj.description);
+        if (newDesc !== null) proj.description = newDesc;
+        const newLink = prompt("Edit project link (URL):", proj.link);
+        if (newLink !== null) proj.link = newLink;
+        await saveFirestoreDoc("settings", "projects", { projects });
+        renderProjects();
+        showStatus("projectsList", "Project updated");
+    }
+
+    async function deleteProject(index) {
+        if (confirm("Delete this project?")) {
+            const projectsData = await getFirestoreDoc("settings", "projects", { projects: [] });
+            let projects = projectsData.projects;
+            projects.splice(index, 1);
+            await saveFirestoreDoc("settings", "projects", { projects });
+            renderProjects();
+            showStatus("projectsList", "Project deleted");
+        }
+    }
+
+    async function editResearch(index) {
+        const researchData = await getFirestoreDoc("settings", "research", { research: [] });
+        const research = researchData.research;
+        const item = research[index];
+        const newTitle = prompt("Edit research title:", item.title);
+        if (newTitle !== null) item.title = newTitle;
+        const newDesc = prompt("Edit research description:", item.description);
+        if (newDesc !== null) item.description = newDesc;
+        const newLink = prompt("Edit research link:", item.link);
+        if (newLink !== null) item.link = newLink;
+        await saveFirestoreDoc("settings", "research", { research });
+        renderResearch();
+        showStatus("researchList", "Research updated");
+    }
+
+    async function deleteResearch(index) {
+        if (confirm("Delete this research item?")) {
+            const researchData = await getFirestoreDoc("settings", "research", { research: [] });
+            let research = researchData.research;
+            research.splice(index, 1);
+            await saveFirestoreDoc("settings", "research", { research });
+            renderResearch();
+            showStatus("researchList", "Research deleted");
+        }
+    }
+
+    async function renderMessages() {
+        try {
+            const snapshot = await db.collection("messages").orderBy("timestamp", "desc").get();
+            const messages = [];
+            snapshot.forEach(doc => messages.push(doc.data()));
+            const container = document.getElementById("messagesList");
+            if (messages.length === 0) {
+                container.innerHTML = "<p>No messages yet.</p>";
+                return;
+            }
+            container.innerHTML = messages.map(msg => `
+                <div class="message-item">
+                    <strong>${escapeHtml(msg.name)}</strong> (${escapeHtml(msg.email)})<br>
+                    <small>${escapeHtml(msg.date)}</small>
+                    <p style="margin-top:6px;">${escapeHtml(msg.message)}</p>
+                </div>
+            `).join("");
+        } catch (err) {
+            console.error("Error loading messages:", err);
+            document.getElementById("messagesList").innerHTML = "<p>Error loading messages.</p>";
+        }
+    }
+
+    function showStatus(elementId, msg) {
+        const statusDiv = document.createElement("div");
+        statusDiv.className = "status";
+        statusDiv.innerText = msg;
+        const parent = document.getElementById(elementId).parentNode;
+        parent.appendChild(statusDiv);
+        setTimeout(() => statusDiv.remove(), 2000);
+    }
+
+    function escapeHtml(str) {
+        if (!str) return '';
+        return str.replace(/[&<>]/g, function(m) {
+            if (m === '&') return '&amp;';
+            if (m === '<') return '&lt;';
+            if (m === '>') return '&gt;';
+            return m;
+        });
+    }
+
+    // Save handlers
+    document.getElementById("saveHeroBtn").addEventListener("click", async () => {
+        const title = document.getElementById("heroTitleInput").value;
+        const desc = document.getElementById("heroDescInput").value;
+        await saveFirestoreDoc("settings", "hero", { title, desc });
+        document.getElementById("heroStatus").innerText = "✅ Hero saved!";
+        setTimeout(() => document.getElementById("heroStatus").innerText = "", 2000);
+    });
+    document.getElementById("saveSkillsBtn").addEventListener("click", async () => {
+        const raw = document.getElementById("skillsInput").value;
+        const skills = raw.split("\n").filter(s => s.trim().length > 0);
+        await saveFirestoreDoc("settings", "skills", { skills });
+        document.getElementById("skillsStatus").innerText = "✅ Skills saved!";
+        setTimeout(() => document.getElementById("skillsStatus").innerText = "", 2000);
+    });
+    document.getElementById("saveContactBtn").addEventListener("click", async () => {
+        const email = document.getElementById("contactEmailInput").value;
+        const address = document.getElementById("contactAddressInput").value;
+        const phone = document.getElementById("contactPhoneInput").value;
+        await saveFirestoreDoc("settings", "contact", { email, address, phone });
+        document.getElementById("contactStatus").innerText = "✅ Contact saved!";
+        setTimeout(() => document.getElementById("contactStatus").innerText = "", 2000);
+    });
+    document.getElementById("saveSocialBtn").addEventListener("click", async () => {
+        const facebook = document.getElementById("fbUrl").value;
+        const instagram = document.getElementById("igUrl").value;
+        await saveFirestoreDoc("settings", "social", { facebook, instagram });
+        document.getElementById("socialStatus").innerText = "✅ Social links saved!";
+        setTimeout(() => document.getElementById("socialStatus").innerText = "", 2000);
+    });
+    document.getElementById("saveCvBtn").addEventListener("click", async () => {
+        const url = document.getElementById("cvUrl").value;
+        await saveFirestoreDoc("settings", "cv", { url });
+        document.getElementById("cvStatus").innerText = "✅ CV link saved!";
+        setTimeout(() => document.getElementById("cvStatus").innerText = "", 2000);
+    });
+    document.getElementById("saveCopyrightBtn").addEventListener("click", async () => {
+        const text = document.getElementById("copyrightInput").value;
+        await saveFirestoreDoc("settings", "copyright", { text });
+        document.getElementById("copyrightStatus").innerText = "✅ Copyright saved!";
+        setTimeout(() => document.getElementById("copyrightStatus").innerText = "", 2000);
+    });
+    document.getElementById("addProjectBtn").addEventListener("click", async () => {
+        const title = document.getElementById("newProjectTitle").value.trim();
+        const description = document.getElementById("newProjectDesc").value.trim();
+        const link = document.getElementById("newProjectLink").value.trim() || "#";
+        if (!title || !description) {
+            alert("Please fill title and description.");
+            return;
+        }
+        const projectsData = await getFirestoreDoc("settings", "projects", { projects: [] });
+        const projects = projectsData.projects;
+        projects.push({ title, description, link });
+        await saveFirestoreDoc("settings", "projects", { projects });
+        renderProjects();
+        document.getElementById("newProjectTitle").value = "";
+        document.getElementById("newProjectDesc").value = "";
+        document.getElementById("newProjectLink").value = "";
+        showStatus("projectsList", "Project added");
+    });
+    document.getElementById("addResearchBtn").addEventListener("click", async () => {
+        const title = document.getElementById("newResearchTitle").value.trim();
+        const description = document.getElementById("newResearchDesc").value.trim();
+        const link = document.getElementById("newResearchLink").value.trim() || "#";
+        if (!title || !description) {
+            alert("Please fill title and description.");
+            return;
+        }
+        const researchData = await getFirestoreDoc("settings", "research", { research: [] });
+        const research = researchData.research;
+        research.push({ title, description, link });
+        await saveFirestoreDoc("settings", "research", { research });
+        renderResearch();
+        document.getElementById("newResearchTitle").value = "";
+        document.getElementById("newResearchDesc").value = "";
+        document.getElementById("newResearchLink").value = "";
+        showStatus("researchList", "Research added");
+    });
+    document.getElementById("clearMessagesBtn").addEventListener("click", async () => {
+        if (confirm("Delete all contact messages?")) {
+            const snapshot = await db.collection("messages").get();
+            const batch = db.batch();
+            snapshot.forEach(doc => batch.delete(doc.ref));
+            await batch.commit();
+            renderMessages();
+            showStatus("messagesList", "All messages cleared");
+        }
+    });
+
+    // Authentication
+    const loginView = document.getElementById("loginView");
+    const dashboardView = document.getElementById("dashboardView");
+    const loginBtn = document.getElementById("loginBtn");
+    const logoutBtn = document.getElementById("logoutBtn");
+    const adminEmail = document.getElementById("adminEmail");
+    const adminPassword = document.getElementById("adminPassword");
+    const loginError = document.getElementById("loginError");
+
+    const forgotBtn = document.getElementById("forgotPasswordBtn");
+    const resetForm = document.getElementById("resetForm");
+    const resetEmail = document.getElementById("resetEmail");
+    const sendResetBtn = document.getElementById("sendResetBtn");
+    const resetMessage = document.getElementById("resetMessage");
+    const cancelResetBtn = document.getElementById("cancelResetBtn");
+
+    forgotBtn.addEventListener("click", () => {
+        resetForm.style.display = "block";
+        resetMessage.innerHTML = "";
+    });
+    cancelResetBtn.addEventListener("click", () => {
+        resetForm.style.display = "none";
+        resetEmail.value = "";
+        resetMessage.innerHTML = "";
+    });
+    sendResetBtn.addEventListener("click", async () => {
+        const email = resetEmail.value.trim();
+        if (!email) {
+            resetMessage.innerHTML = '<span style="color:#e11d48;">Please enter your email address.</span>';
+            return;
+        }
+        try {
+            await auth.sendPasswordResetEmail(email);
+            resetMessage.innerHTML = '<span style="color:#16a34a;">✅ Password reset email sent! Check your inbox.</span>';
+            setTimeout(() => {
+                resetForm.style.display = "none";
+                resetEmail.value = "";
+                resetMessage.innerHTML = "";
+            }, 3000);
+        } catch (error) {
+            resetMessage.innerHTML = `<span style="color:#e11d48;">❌ ${error.message}</span>`;
+        }
+    });
+
+    auth.onAuthStateChanged((user) => {
+        if (user) {
+            loginView.style.display = "none";
+            dashboardView.style.display = "block";
+            loadAdminData();
+        } else {
+            loginView.style.display = "block";
+            dashboardView.style.display = "none";
+        }
+    });
+
+    loginBtn.addEventListener("click", async () => {
+        const email = adminEmail.value.trim();
+        const password = adminPassword.value;
+        if (!email || !password) {
+            loginError.innerText = "Email and password required.";
+            return;
+        }
+        try {
+            await auth.signInWithEmailAndPassword(email, password);
+        } catch (error) {
+            loginError.innerText = error.message;
+            adminPassword.classList.add("error");
+            setTimeout(() => adminPassword.classList.remove("error"), 1000);
+        }
+    });
+
+    logoutBtn.addEventListener("click", async () => {
+        await auth.signOut();
+    });
+</script>
+</body>
+</html>
